@@ -15,8 +15,9 @@ class MainController extends Controller
      */
     public function index(Request $request)
     {
-
-            return view('dash');
+            
+            $data= Company::all();
+            return view('companies')->with('mains',$data);
  
     }
 
@@ -41,7 +42,7 @@ class MainController extends Controller
        
         $task=new Company;
         $request->validate([
-            'name' => 'required|max:10|min:2|unique:companies',
+            'name' => 'required|max:50|min:2|unique:companies',
             'email' => 'required|email|unique:companies',
             'logo' => 'required',
             'website' => 'required|unique:companies'
@@ -51,13 +52,16 @@ class MainController extends Controller
      
         $input = $request->all();
   
-        if ($image = $request->file('logp')) {
-            $destinationPath = 'image/';
+        if ($image = $request->file('logo')) {
+            //$destinationPath = 'images';
             $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
-            $image->move($destinationPath, $profileImage);
+            //$image->move(public_path($destinationPath), $profileImage);
+            $image->move(public_path('/images'), $profileImage);
+         
+          
             $input['logo'] = "$profileImage";
         }
-    
+
         Company::create($input);
 
         $request->session()->flash('alert-success', 'Company successful added!');
