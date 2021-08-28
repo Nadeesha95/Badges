@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Product;
+use App\Models\Company;
 
 class MainController extends Controller
 {
@@ -15,32 +15,9 @@ class MainController extends Controller
      */
     public function index(Request $request)
     {
-       
 
-
-
-
-        if ($request->ajax()) {
-            $data = Product::select('*');
-            return Datatables::of($data)
-                    ->addIndexColumn()
-                    ->addColumn('action', function($row){
-     
-                           $btn = '<a href="javascript:void(0)" class="edit btn btn-primary btn-sm">View</a>';
-    
-                            return $btn;
-                    })
-                    ->rawColumns(['action'])
-                    ->make(true);
-        }
-        
-        
-    
             return view('dash');
-        
-
-
-        
+ 
     }
 
     /**
@@ -62,28 +39,29 @@ class MainController extends Controller
     public function store(Request $request)
     {
        
-
-        $task=new Product;
+        $task=new Company;
         $request->validate([
-            'pname' => 'required|max:10|min:2',
-            'pcat' => 'required',
-            'pprice' => 'required',
-            'date' => 'required',
+            'name' => 'required|max:10|min:2|unique:companies',
+            'email' => 'required|email|unique:companies',
+            'logo' => 'required',
+            'website' => 'required|unique:companies'
+            
 
         ]);
+     
+        $input = $request->all();
+  
+        if ($image = $request->file('logp')) {
+            $destinationPath = 'image/';
+            $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+            $image->move($destinationPath, $profileImage);
+            $input['logo'] = "$profileImage";
+        }
+    
+        Company::create($input);
 
-        $task->pname =$request->pname;
-        $task->pcat =$request->pcat;
-        $task->pprice =$request->pprice;
-        $task->date =$request->date;
-        $task->save();
-        return redirect()->back();
-
-
-
-
-
-
+        $request->session()->flash('alert-success', 'Company successful added!');
+         return redirect()->route("main.index");
 
 
     }
