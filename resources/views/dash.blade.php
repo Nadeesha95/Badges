@@ -9,7 +9,7 @@
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
 <div class="container-md" style="width: 468px; background: white;">
-git test
+git testnnnnn
 @foreach ($errors->all() as $error )
   <div class="alert alert-danger" role="alert">
   {{$error}}
