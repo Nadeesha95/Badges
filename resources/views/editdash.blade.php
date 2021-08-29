@@ -37,19 +37,21 @@
   </div>
 
 
-                    <form method="post" action="{{route('main.store')}}">
+                    <form method="post" action="{{route('main.update',$mains->id)}}">
     {{ csrf_field() }}
+    @method('PUT')
                         <div class="input-group">
-                            <input class="input--style-1" type="text" placeholder="Name" name="name">
+                            <input class="input--style-1" type="text" value="{{$mains->name}}" placeholder="Name" name="name">
                         </div>
                         <div class="input-group">
-                            <input class="input--style-1" type="email" placeholder="email" name="email">
+                            <input class="input--style-1" type="email" value="{{$mains->email}}" placeholder="email" name="email">
                         </div>
                         <div class="input-group">
-                            <input class="input--style-1" type="website" placeholder="Website(URL) " name="website">
+                            <input class="input--style-1" type="website" value="{{$mains->website}}" placeholder="Website(URL) " name="website">
                         </div>
                         <div class="input--style-1">
-                        <input type="file" id="logo" name="logo" accept="image/png" enctype="multipart/form-data">
+                        <img src="{{ $mains->logo }}" width="50px">
+                        <input type="file" id="logo" name="logo"  accept="image/png" enctype="multipart/form-data">
                         </div>
     
                 

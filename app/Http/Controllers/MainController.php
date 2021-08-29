@@ -56,7 +56,7 @@ class MainController extends Controller
             //$destinationPath = 'images';
             $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
             //$image->move(public_path($destinationPath), $profileImage);
-            $image->move(public_path('/images'), $profileImage);
+           
          
           
             $input['logo'] = "$profileImage";
@@ -78,7 +78,10 @@ class MainController extends Controller
      */
     public function show($id)
     {
-        //
+        $task=Company::find($id);
+        
+        $task->delete();
+        return redirect()->back();
     }
 
     /**
@@ -89,7 +92,10 @@ class MainController extends Controller
      */
     public function edit($id)
     {
-        //
+        
+        $data= Company::find($id);
+       
+        return view('editdash')->with('mains',$data);
     }
 
     /**
@@ -101,7 +107,46 @@ class MainController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|max:50',
+            'email' => 'required|email',
+            
+            'website' => 'required'
+            
+
+        ]);
+        
+        $data=Company::find($id);
+
+        $data->name =$request->name;
+        $data->email =$request->email;
+
+
+
+        if ($request->logo) {
+
+           
+            $logo = $request->logo;
+               
+            if ($image = $request->file('logo')) {
+                $destinationPath = '/images';
+                $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+                $image->move(public_path($destinationPath), $profileImage);
+               
+             
+              
+                $input['logo'] = "$profileImage";
+            }
+
+            $data->logo =$logo;
+        }
+         
+
+        $data->website =$request->website;
+        
+        $data->save();
+        $request->session()->flash('alert-success', 'company successful updated!');
+        return redirect()->route("main.index");
     }
 
     /**
@@ -112,6 +157,11 @@ class MainController extends Controller
      */
     public function destroy($id)
     {
-        //
+
+
+        $task=Company::find($id);
+        
+        $task->delete();
+        return redirect()->back();
     }
 }
