@@ -16,7 +16,7 @@ class MainController extends Controller
     public function index(Request $request)
     {
             
-            $data= Company::all();
+            $data= Company::paginate(5);
             return view('companies')->with('mains',$data);
  
     }

@@ -18,15 +18,17 @@
   @foreach ($mains as $main )
     <tr>
       <th scope="row">{{$main->id}}</th>
-      <td> <img src="images/{{$main->logo}}, array('files'=> true)"  width="50" height="50"></td>
+      <td> <img src="{{$main->logo}}"  width="50" height="50"></td>
       <td>{{$main->name}}</td>
       <td>{{$main->email}}</td>
-      <td>{{$main->website}}</td>
+      <td><a href="{{$main->website}}">{{$main->website}}</a></td>
+    
     </tr>
     @endforeach 
   </tbody>
 </table>
 
+{{ $mains->onEachSide(5)->links() }}
 
 </div>
 
